@@ -14,7 +14,7 @@ pipeline {
 
     stage('Docker Build & Push') {
       steps {
-        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred-id']]) {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS-credentials-root']]) {
           sh '''
             aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REPO
             docker build -t $ECR_REPO:$IMAGE_TAG .
