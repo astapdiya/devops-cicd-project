@@ -40,6 +40,7 @@ pipeline {
                     credentialsId: 'AWS-credentials-root'
                 ]]) {
                     sh '''
+                        nslookup oidc.eks.us-east-1.amazonaws.com
                         export AWS_REGION=us-east-1
                         export CLUSTER_NAME=super-service-cluster
                         aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
