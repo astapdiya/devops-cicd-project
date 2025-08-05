@@ -1,13 +1,13 @@
 pipeline {
   agent any
   environment {
-    ECR_REPO = "<your-aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/super-service"
+    ECR_REPO = "225989348084.dkr.ecr.us-east-1.amazonaws.com/super-service"
     IMAGE_TAG = "latest"
   }
 
   stages {
     stage('Checkout') {
-      steps { git url: 'https://github.com/your-org/devops_interview_test.git' }
+      steps { git credentialsId:'github-jenkins-cred' url: 'https://github.com/astapdiya/devops-cicd-project.git' }
     }
 
     stage('Docker Build & Push') {
