@@ -7,14 +7,20 @@ pipeline {
 
   stages {
     stage('Checkout') {
-      steps { git credentialsId:'github-jenkins-cred' url: 'https://github.com/astapdiya/devops-cicd-project.git' }
+      steps {
+        git credentialsId: 'github-jenkins-cred', url: 'https://github.com/astapdiya/devops-cicd-project.git'
+      }
     }
 
     stage('Docker Build & Push') {
       steps {
-        sh 'aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REPO'
-        sh 'docker build -t $ECR_REPO:$IMAGE_TAG .'
-        sh 'docker push $ECR_REPO:$IMAGE_TAG'
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred-id']]) {
+          sh '''
+            aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REPO
+            docker build -t $ECR_REPO:$IMAGE_TAG .
+            docker push $ECR_REPO:$IMAGE_TAG
+          '''
+        }
       }
     }
 
@@ -37,6 +43,18 @@ pipeline {
       steps {
         sh 'ansible-playbook ansible/playbook.yml -i "localhost," --connection=local'
       }
+    }
+  }
+
+  post {
+    always {
+      echo 'Pipeline completed.'
+    }
+    success {
+      echo 'Pipeline ran successfully.'
+    }
+    failure {
+      echo 'Pipeline failed.'
     }
   }
 }
