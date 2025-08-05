@@ -37,22 +37,23 @@ module "eks" {
   enable_irsa = true
 }
 
-resource "aws_ecr_repository" "super_service" {
-  name = "super-service"
+#resource "aws_ecr_repository" "super_service" {
+  #name = "super-service"
 
-  image_scanning_configuration {
-    scan_on_push = true
-  }
+  #image_scanning_configuration {
+   # scan_on_push = true
+ # }
 
-  encryption_configuration {
-    encryption_type = "AES256"
-  }
+  #encryption_configuration {
+   # encryption_type = "AES256"
+ # }
 
-  lifecycle {
-    prevent_destroy = true
-    ignore_changes  = [name]
-  }
-}
+ # lifecycle {
+   # prevent_destroy = true
+  #  ignore_changes  = [name]
+ # }
+#}
+
 
 
 
