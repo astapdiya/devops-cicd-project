@@ -33,10 +33,19 @@ pipeline {
       }
     }
 
-   stage('Deploy to EKS') {
+    stage('Deploy to EKS') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS-credentials-root']]) {
-                    sh 'kubectl apply -f k8s/'
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'AWS-credentials-root'
+                ]]) {
+                    sh '''
+                        # Update kubeconfig using AWS credentials
+                        aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+
+                        # Apply Kubernetes manifests
+                        kubectl apply -f k8s/
+                    '''
                 }
             }
         }
