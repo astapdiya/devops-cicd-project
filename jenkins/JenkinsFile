@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'main', git credentialsId: 'github-jenkins-cred', url: 'https://github.com/astapdiya/devops-cicd-project.git'
+        git branch: 'main', credentialsId: 'github-jenkins-cred', url: 'https://github.com/astapdiya/devops-cicd-project.git'
       }
     }
 
