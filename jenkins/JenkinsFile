@@ -34,10 +34,20 @@ pipeline {
     }
 
     stage('Deploy to EKS') {
-      steps {
-        sh 'kubectl apply -f k8s/'
-      }
+  steps {
+    withEnv([
+      "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}",
+      "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}",
+      "AWS_DEFAULT_REGION=ap-south-1"
+    ]) {
+      sh '''
+        aws eks update-kubeconfig --region ap-south-1 --name devops-eks-cluster
+        kubectl apply -f k8s/
+      '''
     }
+  }
+}
+
 
     stage('Run Ansible') {
       steps {
