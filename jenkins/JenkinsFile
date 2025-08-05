@@ -40,14 +40,10 @@ pipeline {
                     credentialsId: 'AWS-credentials-root'
                 ]]) {
                     sh '''
-                         export AWS_REGION=us-east-1
-                export CLUSTER_NAME=super-service-cluster
-
-                # Update kubeconfig so kubectl can connect to EKS
-                aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-
-                # Now kubectl is authenticated and can deploy
-                kubectl apply -f k8s/
+                        export AWS_REGION=us-east-1
+                        export CLUSTER_NAME=super-service-cluster
+                        aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+                        kubectl apply -f k8s/ --validate=false
                     '''
                 }
             }
